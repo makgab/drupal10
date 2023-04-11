@@ -32,13 +32,17 @@ cd drupal && php -d memory_limit=256M web/core/scripts/drupal quick-start demo_u
  - Run server
 
    - symfony server:start          (in /drupal directory)
+
+     - symfony server:start --port=8080
+
    - php -S 127.0.0.1:8000         (in /drupal/web directory)
 
+     - php bin/console server:start --port=8080
 
 
 
 
-## Install theme
+# Install theme
 
  - https://www.drupal.org/project/themes
 
