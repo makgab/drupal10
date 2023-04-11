@@ -5,19 +5,34 @@
 #
 # variables:
 #
-APPRUN = cd drupal && symfony server:start
+DRUPALDIR = drupal
+APPRUN = symfony server:start
+HOST = localhost
 PORT = 8000
-
+SITENAME = 'Drupal 10 Demo Site'
+LANG = hu
+MEMLIMIT = 256M
 # ------------------------------------------------------------------------------------------
 # targets:
 #
+
 build:
-	echo "No need build :)"
+	composer create-project drupal/recommended-project $(DRUPALDIR)
+
+
+quickstart:
+	cd $(DRUPALDIR) && php -d memory_limit=$(MEMLIMIT) web/core/scripts/drupal quick-start demo_umami
+
+
+standardquickstart:
+	cd $(DRUPALDIR) && php -d memory_limit=$(MEMLIMIT) web/core/scripts/drupal quick-start standard --site-name $(SITENAME) --host $(HOST) --port $(PORT) --langcode $(LANG)
+
 
 run:
-	$(APPRUN) --port=$(PORT)
+	cd $(DRUPALDIR); $(APPRUN) --port=$(PORT)
+
 
 clean:
-	echo "No need clean :)"
+	sudo rm -rf $(DRUPALDIR)
 
 
