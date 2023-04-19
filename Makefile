@@ -5,8 +5,9 @@
 #
 # variables:
 #
-DRUPALDIR = drupal
+NAME = drupal
 APPRUN = symfony server:start
+IMAGE = fedora-drupal
 HOST = localhost
 PORT = 8000
 SITENAME = 'Drupal 10 Demo Site'
@@ -17,22 +18,31 @@ MEMLIMIT = 256M
 #
 
 build:
-	composer create-project drupal/recommended-project $(DRUPALDIR)
+	composer create-project drupal/recommended-project $(NAME)
 
 
 quickstart:
-	cd $(DRUPALDIR) && php -d memory_limit=$(MEMLIMIT) web/core/scripts/drupal quick-start demo_umami
+	cd $(NAME) && php -d memory_limit=$(MEMLIMIT) web/core/scripts/drupal quick-start demo_umami
 
 
 standardquickstart:
-	cd $(DRUPALDIR) && php -d memory_limit=$(MEMLIMIT) web/core/scripts/drupal quick-start standard --site-name $(SITENAME) --host $(HOST) --port $(PORT) --langcode $(LANG)
+	cd $(NAME) && php -d memory_limit=$(MEMLIMIT) web/core/scripts/drupal quick-start standard --site-name $(SITENAME) --host $(HOST) --port $(PORT) --langcode $(LANG)
 
 
 run:
-	cd $(DRUPALDIR); $(APPRUN) --port=$(PORT)
+	cd $(NAME); $(APPRUN) --port=$(PORT)
 
 
 clean:
-	sudo rm -rf $(DRUPALDIR)
+	sudo rm -rf $(NAME)
 
+
+#
+# Docker specified targets:
+#
+local-docker-build:
+	docker build --tag localhost/$(IMAGE):dev .
+
+local-docker-run:
+	docker run --rm -p 8000:8000 --name $(NAME) --hostname $(NAME) -v $(shell pwd)/$(NAME):/drupal localhost/$(IMAGE):dev &
 
